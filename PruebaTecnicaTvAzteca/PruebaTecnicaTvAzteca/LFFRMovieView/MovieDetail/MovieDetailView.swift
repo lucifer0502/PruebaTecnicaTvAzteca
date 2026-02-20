@@ -71,7 +71,7 @@ extension MovieDetailView{
                 .frame(width: 200, height: 300)
                 .cornerRadius(15)
                 .clipped()
-                .matchedGeometryEffect(id: "poster", in: animation, isSource: !showPosterFullScreen)
+                .matchedGeometryEffect(id: "poster", in: animation)
                 .onTapGesture {
                     withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
                         showPosterFullScreen = true
@@ -139,7 +139,7 @@ extension MovieDetailView{
                 
                 AsyncImageView(url: Constant.urlImage + posterPath)
                     .scaledToFit()
-                    .matchedGeometryEffect(id: "poster", in: animation, isSource: showPosterFullScreen)
+                    .matchedGeometryEffect(id: "poster", in: animation)
                     .padding()
                 
                 Button {

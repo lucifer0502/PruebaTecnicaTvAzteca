@@ -14,6 +14,7 @@ struct AsyncImageView: View {
     
     // MARK: - Body
     var body: some View {
+        Color(red: 3/255, green: 3/255, blue: 31/255)
         AsyncImage(url: URL(string: url)) { phase in
             if let image = phase.image {
                 image

@@ -39,7 +39,7 @@ struct CardGeneric: View {
                 AsyncImageView(url: firstUrl)
                     .frame(width: cardConfiguration.width, height: cardConfiguration.height)
             } else {
-                Color.gray.opacity(0.5)
+                Color(red: 3/255, green: 3/255, blue: 31/255)
                     .aspectRatio(cardConfiguration.aspectRatio, contentMode: .fit)
                     .frame(width: cardConfiguration.width, height: cardConfiguration.height)
             }

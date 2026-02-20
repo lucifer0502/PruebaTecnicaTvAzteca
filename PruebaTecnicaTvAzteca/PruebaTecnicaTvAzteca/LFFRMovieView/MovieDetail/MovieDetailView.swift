@@ -59,6 +59,7 @@ extension MovieDetailView{
             }
             .padding()
         }
+        .scrollIndicators(.hidden)
     }
 
     @ViewBuilder
@@ -161,7 +162,6 @@ extension MovieDetailView{
         }
     }
 
-    
     private var posterButton: some View {
         Button {
             withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
@@ -177,5 +177,4 @@ extension MovieDetailView{
                 .cornerRadius(12)
         }
     }
-
 }

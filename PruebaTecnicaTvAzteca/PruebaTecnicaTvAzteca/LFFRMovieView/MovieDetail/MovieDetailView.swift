@@ -14,6 +14,10 @@ struct MovieDetailView: View {
     
     // MARK: - State Objects
     @StateObject private var viewModel: MovieDetailViewModel
+    
+    @Namespace private var animation
+    @State private var showPosterFullScreen = false
+
      
     // MARK: - Initializer
      init() {
@@ -28,11 +32,14 @@ struct MovieDetailView: View {
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $viewModel.showTrailer) {
                 TrailerView(movieKey: viewModel.movieKey)
-                    .presentationBackground(.clear)
             }
             if viewModel.isLoading {
                 LoadingView()
             }
+            if showPosterFullScreen {
+                fullScreenPoster
+            }
+
         }
     }
 }
@@ -47,23 +54,32 @@ extension MovieDetailView{
                 titleAndStats
                 overviewText
                 trailerButton
+                posterButton
                 Spacer()
             }
             .padding()
         }
     }
-    
+
     @ViewBuilder
     private var posterImage: some View {
         if let posterPath = navigationManager.selectedMovie?.posterPath,
            !posterPath.isEmpty {
+            
             AsyncImageView(url: Constant.urlImage + posterPath)
                 .scaledToFit()
                 .frame(width: 200, height: 300)
                 .cornerRadius(15)
                 .clipped()
+                .matchedGeometryEffect(id: "poster", in: animation, isSource: !showPosterFullScreen)
+                .onTapGesture {
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                        showPosterFullScreen = true
+                    }
+                }
         }
     }
+
     
     private var titleAndStats: some View {
         VStack(spacing: 5) {
@@ -109,4 +125,57 @@ extension MovieDetailView{
                 .cornerRadius(12)
         }
     }
+    
+    @ViewBuilder
+    private var fullScreenPoster: some View {
+        if let posterPath = navigationManager.selectedMovie?.posterPath {
+            ZStack(alignment: .topTrailing) {
+                
+                Color.black.opacity(0.9)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        closePoster()
+                    }
+                
+                AsyncImageView(url: Constant.urlImage + posterPath)
+                    .scaledToFit()
+                    .matchedGeometryEffect(id: "poster", in: animation, isSource: showPosterFullScreen)
+                    .padding()
+                
+                Button {
+                    closePoster()
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.largeTitle)
+                        .foregroundColor(.white)
+                        .padding()
+                }
+            }
+            .transition(.opacity)
+        }
+    }
+
+    private func closePoster() {
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+            showPosterFullScreen = false
+        }
+    }
+
+    
+    private var posterButton: some View {
+        Button {
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                showPosterFullScreen = true
+            }
+        } label: {
+            Label("Ver Poster", systemImage: "photo")
+                .font(.headline)
+                .foregroundColor(.white)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.blue)
+                .cornerRadius(12)
+        }
+    }
+
 }

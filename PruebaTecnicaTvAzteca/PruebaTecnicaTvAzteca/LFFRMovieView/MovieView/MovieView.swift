@@ -23,9 +23,7 @@ struct MovieView: View {
     // MARK: - Body
     var body: some View {
         content
-            .refreshable {
-                viewModel.fetchAllCategories()
-            }
+           
             .onAppear {
                 viewModel.fetchAllCategories()
             }
@@ -45,6 +43,9 @@ struct MovieView: View {
                         categorySection(for: category)
                     }
                 }
+            }
+            .refreshable {
+                viewModel.fetchAllCategories()
             }
             .navigationTitle("Películas")
             .navigationDestination(for: DestinationEnum.self) { destination in
